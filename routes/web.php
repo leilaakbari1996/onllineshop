@@ -21,6 +21,7 @@ Route::get('/',[HomeController::class,'index']);
 Route::prefix('/adminpanel')->group(function(){
     Route::resource('categories',CategoryController::class);
     Route::resource('brands',BrandController::class);
+
     Route::get('/', function () {
         return view('admin.home');
     });
