@@ -27,11 +27,12 @@ Route::prefix('')->name('client.')->group(function(){
     Route::get('/product/{product}',[ClientProductController::class,'show'])->name('products.show');
 });
 Route::prefix('/adminpanel')->group(function(){
+
+    Route::resource('categories',CategoryController::class);
+    Route::resource('brands',BrandController::class);
     Route::get('/', function () {
         return view('admin.home');
     });
-    Route::resource('categories',CategoryController::class);
-    Route::resource('brands',BrandController::class);
     Route::resource('products', ProductController::class);
     Route::resource('roles', RoleController::class);
     Route::resource('products.pictures', PictureController::class);
