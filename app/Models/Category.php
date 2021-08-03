@@ -15,4 +15,8 @@ class Category extends Model
     public function children(){
         return $this->hasMany(Category::class,'category_id');
     }
+    public function getallsubCategoryProduct(){//find childrens category.get products category_id member $childrenIds
+        $childrenIds = $this -> children()->pluck('id');
+        return Product::query()->whereIn('category_id',$childrenIds)->get();
+    }
 }
