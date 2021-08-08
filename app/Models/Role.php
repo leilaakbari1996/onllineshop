@@ -17,4 +17,10 @@ class Role extends Model
     public function getRolePremissionsAttribute(){
         return $this->premissions()->get();
     }
+    public static function findByTitle($title){
+        return self::query()->whereTitle($title)->firstOrFail();
+    }
+    public function hasPermission($permission){
+        return $this->premissions()->where('title',$permission)->exists();
+    }
 }

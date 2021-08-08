@@ -1,4 +1,4 @@
-<div dir="ltr" style="text-align: left">
+<div dir="ltr" style="text-align: center">
     @if (count($errors->all())>0)
     <ul class="bg-danger p-3 mt-2 " style="border-radius: 5px">
         @foreach ($errors->all() as $error)
