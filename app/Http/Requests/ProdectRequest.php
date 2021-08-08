@@ -25,7 +25,7 @@ class ProdectRequest extends FormRequest
     {
         return [
             'name' => ['required'],
-            'slug' => ['required','unique:products,slug','alpha_dash'],
+            'slug' => ['required','unique:products,slug'],
             'category_id' => ['required','exists:categories,id'],
             'brand_id' => ['required','exists:brands,id'],
             'price' => ['required','min:1000','integer'],
