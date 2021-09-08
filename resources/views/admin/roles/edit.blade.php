@@ -8,6 +8,7 @@
                     <h3 class="card-title">ویرایش {{$role->title}}</h3>
                 </div>
                  <div class="card-body">
+                    @include('admin.layout.errors')
                     <form action="{{route('roles.update',$role)}}" method="post">
                         @csrf
                         @method('PATCH')
@@ -39,7 +40,6 @@
                             <input type="submit" class="btn btn-sm btn-primary" value="افزودن">
                         </div>
                     </form>
-                    @include('admin.layout.errors')
                 </div>
             </div>
         </div>

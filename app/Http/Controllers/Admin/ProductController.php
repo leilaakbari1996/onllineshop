@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProdectRequest;
 use App\Http\Requests\ProductUpdateRequest;
+use App\Models\Property;
 
 class ProductController extends Controller
 {
@@ -56,6 +57,7 @@ class ProductController extends Controller
              'desk' => $request->get('desc'),
              'image' => $path
         ]);
+        session()->flash('success',' محصول با موفقیت اضاف شد.');
         return redirect(route('products.index'));
     }
 
@@ -125,5 +127,8 @@ class ProductController extends Controller
     {
         $product->delete();
         return redirect(route('products.index'));
+    }
+    public function properties(){
+        return $this->belongsToMany(Property::class)->withpivot(['value'])->withtimestamps();
     }
 }

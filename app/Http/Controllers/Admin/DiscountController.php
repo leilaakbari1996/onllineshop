@@ -41,6 +41,7 @@ class DiscountController extends Controller
     public function store(Product $product,DiscontRequest $request)
     {
         $product->addDiscount($request);
+        session()->flash('success','تخفیف محصول مورد نظر با موفقیت اضاف شد.');
         return redirect(route('products.index'));
     }
 

@@ -8,6 +8,7 @@
                     <h3 class="card-title">ایجاد محصول</h3>
                 </div>
                 <div class="card-body">
+                    @include('admin.layout.errors')
                     <form action="{{route('products.store')}}" method="post" enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
@@ -53,13 +54,7 @@
                         </div>
                     </form>
                 </div>
-                @if (count($errors->all()) > 0)
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li class="text-danger">{{$error}}</li>
-                        @endforeach
-                    </ul>
-                @endif
+
             </div>
         </div>
     </div>

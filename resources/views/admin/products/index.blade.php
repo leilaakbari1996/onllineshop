@@ -10,8 +10,8 @@
                     <h3 class="card-title">محصولات</h3>
                   </div>
                   <!-- /.card-header -->
-                  <div class="card-body">
-                    <table id="example2" class="table table-bordered table-hover">
+                  <div class="card-body" style="overflow-x: scroll">
+                    <table id="example2" class="table table-bordered table-hover" >
                       <thead>
                       <tr>
                         <th>#</th>
@@ -22,6 +22,8 @@
                         <th>تاریخ ایجاد</th>
                         <th>تصویر</th>
                         <th>گالری</th>
+                        <th>ویژگی ها</th>
+                        <th>کامنت ها</th>
                         <th>تخفیف</th>
                         <th>ویرایش</th>
                         <th>حذف</th>
@@ -44,6 +46,14 @@
                                 <td>
                                     <a href="{{route('products.pictures.index',$product)}}"
                                      class="btn btn-sm btn-warning">گالری</a>
+                                </td>
+                                <td>
+                                    <a href="{{route('products.properties.index',$product)}}"
+                                     class="btn btn-sm btn-warning">ویژگی ها</a>
+                                </td>
+                                <td>
+                                    <a href="{{route('products.comments.index',$product)}}"
+                                    class="btn btn-sm btn-success">کامنت ها</a>
                                 </td>
                                 <td>
                                     @if (!$product->has_discount)

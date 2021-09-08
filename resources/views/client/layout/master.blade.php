@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html dir="rtl">
 <head>
@@ -19,6 +20,11 @@
 <link rel="stylesheet" type="text/css" href="/client/css/responsive-rtl.css" />
 <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans' type='text/css'>
 @yield('style')
+<style>
+    .like{
+        color: red;
+    }
+</style>
 <!-- CSS Part End-->
 </head>
 <body>
@@ -61,7 +67,10 @@
                     </ul>
                   </div>
                 </li>
-                <li><a href="#">لیست علاقه مندی (0)</a></li>
+                @auth
+                   <li><a href="{{route('client.likeList')}}">لیست علاقه مندی (<span id="likes_count">
+                       {{auth()->user()->likes()->count()}}</span>)</a></li>
+                @endauth
                 <li><a href="checkout.html">تسویه حساب</a></li>
               </ul>
             </div>
@@ -123,25 +132,43 @@
             <div id="cart">
               <button type="button" data-toggle="dropdown" data-loading-text="Loading..." class="heading dropdown-toggle">
               <span class="cart-icon pull-left flip"></span>
-              <span id="cart-total">2 آیتم - 132000 تومان</span></button>
-              <ul class="dropdown-menu">
+              <span id="cart-total"><span id="total_item">
+                   {{\App\Models\Cart::totalItems()}}
+              </span>
+               آیتم - <span id="total_amount">{{\App\Models\Cart::totalAmount()}}</span> تومان</span></button>
+              <ul class="dropdown-menu" id="menu-cart">
                 <li>
                   <table class="table">
-                    <tbody>
-                      <tr>
-                        <td class="text-center"><a href="product.html"><img class="img-thumbnail" title="کفش راحتی مردانه" alt="کفش راحتی مردانه" src="image/product/sony_vaio_1-50x50.jpg"></a></td>
-                        <td class="text-left"><a href="product.html">کفش راحتی مردانه</a></td>
-                        <td class="text-right">x 1</td>
-                        <td class="text-right">32000 تومان</td>
-                        <td class="text-center"><button class="btn btn-danger btn-xs remove" title="حذف" onClick="" type="button"><i class="fa fa-times"></i></button></td>
-                      </tr>
-                      <tr>
-                        <td class="text-center"><a href="product.html"><img class="img-thumbnail" title="تبلت ایسر" alt="تبلت ایسر" src="image/product/samsung_tab_1-50x50.jpg"></a></td>
-                        <td class="text-left"><a href="product.html">تبلت ایسر</a></td>
-                        <td class="text-right">x 1</td>
-                        <td class="text-right">98000 تومان</td>
-                        <td class="text-center"><button class="btn btn-danger btn-xs remove" title="حذف" onClick="" type="button"><i class="fa fa-times"></i></button></td>
-                      </tr>
+                    <tbody id="cart-table-body">
+                        @php
+                            $itemsCart = \App\Models\Cart::itemCart();
+                        @endphp
+                        @foreach ($itemsCart as $item)
+                            <tr id="cart-row-{{$item['product']->id}}">
+                                <td class="text-center">
+                                    <a href="{{route('client.products.show',$item['product'])}}">
+                                        <img class="img-thumbnail" width="50"
+                                        title="{{$item['product']->name}}"
+                                        alt="{{$item['product']->name}}"
+                                        src="{{str_replace('public','/storage',$item['product']->image)}}">
+                                    </a>
+                                </td>
+                                <td class="text-left"><a href="{{route('client.products.show',$item['product'])}}">
+                                    {{$item['product']->name}}
+                                   </a>
+                                </td>
+                                <td class="text-right">x {{$item['quantity']}}</td>
+                                <td class="text-right">{{$item['product']->cost_with_discount}} تومان</td>
+                                <td class="text-center">
+                                    <button class="btn btn-danger btn-xs remove" title="حذف"
+                                    onClick="removeFromCart({{$item['product']->id}})"
+                                    type="button"><i class="fa fa-times"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        @endforeach
+
+
                     </tbody>
                   </table>
                 </li>
@@ -151,23 +178,33 @@
                       <tbody>
                         <tr>
                           <td class="text-right"><strong>جمع کل</strong></td>
-                          <td class="text-right">132000 تومان</td>
+                          <td class="text-right"><span id="total_main">
+                              {{\App\Models\Cart::totalAmountwithOutDiscount()}} تومان</span></td>
                         </tr>
                         <tr>
                           <td class="text-right"><strong>کسر هدیه</strong></td>
-                          <td class="text-right">4000 تومان</td>
+                          <td class="text-right"><span id="total_discount_main">
+                              {{\App\Models\Cart::totalDiscount() }}تومان</span></td>
                         </tr>
-                        <tr>
-                          <td class="text-right"><strong>مالیات</strong></td>
-                          <td class="text-right">11880 تومان</td>
-                        </tr>
+
                         <tr>
                           <td class="text-right"><strong>قابل پرداخت</strong></td>
-                          <td class="text-right">139880 تومان</td>
+                          <td class="text-right"><span id="total_amount_main">
+                              {{\App\Models\Cart::totalAmount() }} تومان</span></td>
                         </tr>
                       </tbody>
                     </table>
-                    <p class="checkout"><a href="cart.html" class="btn btn-primary"><i class="fa fa-shopping-cart"></i> مشاهده سبد</a>&nbsp;&nbsp;&nbsp;<a href="checkout.html" class="btn btn-primary"><i class="fa fa-share"></i> تسویه حساب</a></p>
+                    <p class="checkout"><a href="{{route('client.cart.index')}}" class="btn btn-primary">
+                        <i class="fa fa-shopping-cart"></i> مشاهده سبد</a>&nbsp;&nbsp;&nbsp;
+
+                        <a href="
+                            @if (auth()->user())
+                               {{route('client.order.create')}}
+                            @else
+                                {{route('client.register')}}
+                            @endif"
+                            class="btn btn-primary">
+                            <i class="fa fa-share"></i> ثبت سفارش</a></p>
                   </div>
                 </li>
               </ul>
@@ -323,6 +360,108 @@
 <script type="text/javascript" src="/client/js/jquery.dcjqaccordion.min.js"></script>
 <script type="text/javascript" src="/client/js/owl.carousel.min.js"></script>
 <script type="text/javascript" src="/client/js/custom.js"></script>
+<script>
+
+    function like(productId){
+        $.ajax({
+            type: "post",
+            url: '/likes/'+ productId,
+            data: {
+                _token: "{{csrf_token()}}",
+
+            },
+            success : function(data){
+                var icon = $('#like-'+productId + '>.fa-heart');
+                if(icon.hasClass('like')){
+                    icon.removeClass('like');
+                }else{
+                    icon.addClass('like');
+                }
+                $('#likes_count').text(data.likes_count);
+            }
+
+        })
+    }
+    function removeFromCart(productId){
+        $.ajax({
+            type:"delete",
+            url:"/cart/"+productId,
+            data:{
+                _token: "{{csrf_token()}}",
+            },success:function(data){
+
+
+
+                $('#total_amount_main').text(data.cart.tatalAmount);
+
+                $('#total_discount_main').text(data.cart.totalDiscount);
+                $('#total_main').text(data.cart.total);
+
+                $('#total_amount').text(data.cart.tatalAmount);
+                $('#total_item').text(data.cart.tatal_item);
+                $('#cart-row-'+productId).remove();
+
+            }
+        });
+    }
+    function addToCart(productId){
+        var quantity = 1;
+        if($('#input-quantity').length){
+            quantity = $('#input-quantity').val();
+        }
+        $.ajax({
+            type:"post",
+            url:"/cart/"+productId,
+            data:{
+                _token: "{{csrf_token()}}",
+                quantity:quantity
+            },success :function(data){
+                $('#total_amount').text(data.cart.tatalAmount);
+                $('#total_item').text(data.cart.tatal_item);
+
+                $('#total_amount_main').text(data.cart.tatalAmount);
+
+                $('#total_discount_main').text(data.cart.totalDiscount);
+                $('#total_main').text(data.cart.total);
+
+
+                if(!$('#cart-row-'+productId).length){
+                    var product = data.cart[productId].product;
+                    $('#cart-table-body:last-child').append(
+                        '<tr  id="cart-row-'+product.id+'">'
+                            + '<td class="text-center" > <a href=""> <img class="img-thumbnail" width="50" title="'+ product.name +'" alt="'+product.name+'" src="'+product.image_path+'" </a> </td>'
+                            +'<td class="text-left"> <a href="'+product.id+'">'+product.name+'</a></td>'
+                            +'<td class="text-right">x '+data.cart[productId].quantity+'</td>'
+                            +'<td class="text-right">'+product.cost_with_discount+' تومان</td>'
+                            +'<td class="text-center"><button class="btn btn-danger btn-xs remove" title="حذف" type="button" onClick="removeFromCart('+productId+')"><i class="fa fa-times"></i></button></td>'
+                            +'</tr>'
+                    );
+                }
+            }
+        });
+
+    }
+    function updateCart(productId){
+        var quantity = $('#quantity').val();
+        $.ajax({
+            type:'patch',
+            url:'/cart/'+productId,
+            data:{
+                _token: "{{csrf_token()}}",
+                quantity:quantity
+            },success:function(data){
+                $('#total_amount').text(data.cart.tatalAmount);
+                $('#total_amount_cart').text(data.cart.tatalAmount);
+                $('#total_amount_discount').text(data.cart.totalDiscount);
+                $('#total').text(data.cart.total);
+                $('#total_item').text(data.cart.tatal_item);
+            }
+        });
+    }
+
+
+/* onClick="'+removeFromCart(productId)+'" */
+</script>
 @yield('script')
 <!-- JS Part End-->
 </body>

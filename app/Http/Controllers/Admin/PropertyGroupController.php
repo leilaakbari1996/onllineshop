@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\propertyGroup;
 use Illuminate\Http\Request;
+use App\Models\propertyGroup;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\PropertyGroupsRequest;
+use App\Models\Property;
 
 class PropertyGroupController extends Controller
 {
@@ -27,18 +29,24 @@ class PropertyGroupController extends Controller
      */
     public function create()
     {
-        return view('admin.propertyGroups.create');
+        return view('admin.propertyGroups.create',[
+            'properties' => Property::all()
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\PropertyGroupsRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PropertyGroupsRequest $request)
     {
-        //
+        propertyGroup::query()->create([
+            'title' => $request->get('title')
+        ]);
+        session()->flash('success',' گروه ویژگی با موفقیت اضاف شد.');
+        return redirect(route('propertyGroups.index'));
     }
 
     /**
@@ -60,19 +68,26 @@ class PropertyGroupController extends Controller
      */
     public function edit(propertyGroup $propertyGroup)
     {
-        //
+        return view('admin.propertyGroups.edit',[
+            'propertyGroup' => $propertyGroup,
+            'properties' => Property::all()
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\PropertyGroupsRequest  $request
      * @param  \App\Models\propertyGroup  $propertyGroup
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, propertyGroup $propertyGroup)
+    public function update(PropertyGroupsRequest $request, propertyGroup $propertyGroup)
     {
-        //
+        $propertyGroup->update([
+            'title' => $request->get('title')
+        ]);
+
+        return redirect(route('propertyGroups.index'));
     }
 
     /**

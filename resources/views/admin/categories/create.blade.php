@@ -21,6 +21,18 @@
 
                         </div>
                         <div class="form-group">
+                            <label>انتخاب گروه ویژگی ها</label>
+                            <div class="row">
+                                @foreach ($properties as $property)
+                                    <label class="col-sm-3">
+                                        <input type="checkbox" name="properties[]"
+                                        value="{{$property->id}}"> {{$property->title}}
+                                    </label>
+
+                                @endforeach
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label for="">عنوان</label>
                             <input type="text" value="" class="form-control" id="title" name="title">
                             <div class="form-group mt-4">

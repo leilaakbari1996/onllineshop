@@ -24,4 +24,14 @@ class Category extends Model
     public function getHasChildrenAttribute(){
         return $this-> children() -> count() > 0;
     }
+    public function propertyGroups(){
+        return $this->belongsToMany(PropertyGroup::class);
+    }
+    public function hasPropertyGroup(PropertyGroup $propertyGroup){
+        return $this->propertyGroups()->where('property_group_id',$propertyGroup->id)->exists();
+    }
+    public function products(){
+        return $this->hasMany(Product::class,'category_id');
+    }
+
 }

@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Brand;
 use App\Models\Category;
+use App\Observers\CategoryObserver;
 use Illuminate\Contracts\View\View as ViewView;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -27,11 +28,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        view()->composer(['client.products.show','client.home','client.register.create','client.register.otp'], function ($view) {
+        view()->composer(['client.*'],
+         function ($view) {
             $view->with([
                 'categories'=>Category::query()->where('category_id',null)->get(),
                 'brands'=> Brand::all()
             ]);
         });
+        Category::observe(CategoryObserver::class);
     }
 }

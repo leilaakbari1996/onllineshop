@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request as HttpFoundationRequest;
 
 class Product extends Model
 {
+    protected $appends = ['cost_with_discount','image_path'];
     use HasFactory;
     protected $guarded = [];
     public function brand(){
@@ -74,5 +75,22 @@ class Product extends Model
         return null;
     }
 
-
+    public function properties()
+    {
+        return $this->belongsToMany(Property::class)
+            ->withPivot(['value'])
+            ->withTimestamps();
+    }
+    public function comments(){
+        return $this->hasMany(Comment::class);
+    }
+    public function likes(){
+        return $this->belongsToMany(User::class,'likes')->withTimestamps();
+    }
+    public function getIsLikeAttribute(){
+        return $this->likes()->where('user_id',auth()->id())->exists();
+    }
+    public function getImagePathAttribute(){
+        return str_replace('public','/storage',$this->image);
+    }
 }

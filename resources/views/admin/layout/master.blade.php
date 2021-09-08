@@ -271,6 +271,12 @@
                         <p>لیست</p>
                     </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{route('featuredCategory.create')}}" class="nav-link">
+                        <i class="fa fa-circle-o nav-icon"></i>
+                        <p>انتخاب دسته بندی ویژه</p>
+                        </a>
+                    </li>
 
 
                 </ul>
@@ -303,6 +309,30 @@
                     <a href="#" class="nav-link">
                     <i class="nav-icon fa fa-plus-square-o"></i>
                     <p>
+                        کد تخفیف
+                        <i class="fa fa-angle-left right"></i>
+                    </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="{{route('offers.create')}}" class="nav-link">
+                        <i class="fa fa-circle-o nav-icon"></i>
+                        <p>ایجاد</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{route('offers.index')}}" class="nav-link">
+                        <i class="fa fa-circle-o nav-icon"></i>
+                        <p>لیست</p>
+                        </a>
+                    </li>
+
+                    </ul>
+                </li>
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                    <i class="nav-icon fa fa-plus-square-o"></i>
+                    <p>
                          گروه مشخصات
                         <i class="fa fa-angle-left right"></i>
                     </p>
@@ -316,6 +346,54 @@
                     </li>
                     <li class="nav-item">
                         <a href="{{route('propertyGroups.index')}}" class="nav-link">
+                        <i class="fa fa-circle-o nav-icon"></i>
+                        <p>لیست</p>
+                        </a>
+                    </li>
+
+                    </ul>
+                </li>
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                    <i class="nav-icon fa fa-plus-square-o"></i>
+                    <p>
+                         مشخصات
+                        <i class="fa fa-angle-left right"></i>
+                    </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="{{route('properties.create')}}" class="nav-link">
+                        <i class="fa fa-circle-o nav-icon"></i>
+                        <p>ایجاد</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{route('properties.index')}}" class="nav-link">
+                        <i class="fa fa-circle-o nav-icon"></i>
+                        <p>لیست</p>
+                        </a>
+                    </li>
+
+                    </ul>
+                </li>
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                    <i class="nav-icon fa fa-plus-square-o"></i>
+                    <p>
+                        اسلایدر
+                        <i class="fa fa-angle-left right"></i>
+                    </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="{{route('sliders.create')}}" class="nav-link">
+                        <i class="fa fa-circle-o nav-icon"></i>
+                        <p>ایجاد</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{route('sliders.index')}}" class="nav-link">
                         <i class="fa fa-circle-o nav-icon"></i>
                         <p>لیست</p>
                         </a>
@@ -353,7 +431,8 @@
 
     <!-- Main content -->
     <section class="content">
-          @yield('content')
+        @include('admin.layout.notification')
+        @yield('content')
     </section>
     <!-- /.content -->
   </div>

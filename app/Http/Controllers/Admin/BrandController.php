@@ -46,6 +46,7 @@ class BrandController extends Controller
             'name' => $request->get('name'),
             'image' => $path
         ]);
+        session()->flash('success','برند با موفقیت اضاف شد.');
         return redirect(route('brands.index'));
     }
 

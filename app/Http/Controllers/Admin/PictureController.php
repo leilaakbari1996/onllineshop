@@ -43,6 +43,7 @@ class PictureController extends Controller
     public function store(Product $product,productPictureRequest $request)
     {
         $product->addPicture($request);
+        session()->flash('success','گالری با موفقیت اضاف شد.');
         return redirect()->back();
     }
 

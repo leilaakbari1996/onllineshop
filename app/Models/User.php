@@ -66,4 +66,18 @@ class User extends Authenticatable
         Mail::to($user->email)->send(new otpMail($otp));
         return $user;
     }
+    public function like(Product $product){
+        $islikebefore = $this-> likes()->where('id',$product->id)->exists();//if befor liked.
+        if($islikebefore){
+            return $this->likes()->detach($product);
+        }
+        return $this->likes()->attach($product);
+    }
+    public function likes(){
+        return $this->belongsToMany(Product::class,'likes')->withTimestamps();
+    }
+    public function deleteLike(Product $product){
+        return $this->likes()->detach($product);
+    }
+
 }

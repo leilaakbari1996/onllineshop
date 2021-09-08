@@ -47,6 +47,7 @@ class RoleController extends Controller
 
         ]);
         $role->premissions()->attach($request->get('premissions'));
+        session()->flash('success','نقش با موفقیت اضاف شد.');
         return redirect(route('roles.index'));
     }
 

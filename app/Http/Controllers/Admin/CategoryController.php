@@ -6,6 +6,7 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\NewCategoryRequest;
+use App\Models\PropertyGroup;
 
 class CategoryController extends Controller
 {
@@ -29,7 +30,8 @@ class CategoryController extends Controller
     public function create()
     {
         return view('admin.categories.create',[
-            'categories' => Category::all()
+            'categories' => Category::all(),
+            'properties' => PropertyGroup::all()
         ]);
     }
 
@@ -41,10 +43,11 @@ class CategoryController extends Controller
      */
     public function store(NewCategoryRequest $request)
     {
-        Category::query()->create([
+        $category = Category::query()->create([
             'title' => $request->get('title'),
             'category_id' => $request->get('category_id')
         ]);
+        $category->propertyGroups()->attach($request->get('properties'));
         return redirect(route('categories.index'));
     }
 
@@ -69,7 +72,8 @@ class CategoryController extends Controller
     {
         return view('admin.categories.edit',[
             'category' => $category,
-            'categories' => Category::all()
+            'categories' => Category::all(),
+            'properties' => PropertyGroup::all()
         ]);
     }
 
@@ -86,6 +90,7 @@ class CategoryController extends Controller
             'category_id' => $request->get('category_id'),
             'title' => $request->get('title')
         ]);
+        $category->propertyGroups()->sync($request->get('properties'));
         return redirect(route('categories.index'));
     }
 
@@ -97,7 +102,8 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
+        $category->propertyGroups()->detach();
         $category->delete();
-        return redirect(route('categories.destroy'));
+        return redirect(route('categories.index'));
     }
 }

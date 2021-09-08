@@ -21,18 +21,18 @@
                       </tr>
                       </thead>
                       <tbody>
-                          @foreach ($propertes as $property)
+                          @foreach ($properties as $property)
                             <tr>
                                 <td>{{$property->id}}</td>
                                 <td>{{$property->title}}
                                 </td>
                                 <td>
-                                    <a href="{{route('propertyGroup.edit',$property)}}" class="btn btn-primary
+                                    <a href="{{route('propertyGroups.edit',$property)}}" class="btn btn-primary
                                          btn-sm">ویرایش</a>
 
                                 </td>
                                 <td>
-                                    <form action="{{route('propertyGroup.destroy',$property)}}" method="POST">
+                                    <form action="{{route('propertyGroups.destroy',$property)}}" method="POST">
                                         @csrf
                                         @method('delete')
                                         <input type="submit" class="btn btn-danger btn-sm" value="حذف">
